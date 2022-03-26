@@ -52,7 +52,7 @@ class PhoneBook {
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
     fun addPhone(name: String, phone: String): Boolean =
-        if (name in book && phone in book || name !in book && phone in book) false else {
+        if (name in book && phone in book.keys || name !in book && phone in book.keys) false else {
             book[phone] = name
             true
         }
@@ -65,10 +65,11 @@ class PhoneBook {
      * либо у него не было такого номера телефона.
      */
     fun removePhone(name: String, phone: String): Boolean =
-        if (name !in book) false else {
-            book.remove(name)
+        if (name !in book.keys || phone !in book.keys) false else {
+            book.remove(phone)
             true
         }
+    // if book is var then book = book.filter { (i, _) -> i != phone } as MutableMap<String, String>
 
     /**
      * Вернуть все номера телефона заданного человека.
@@ -93,5 +94,8 @@ class PhoneBook {
      * и каждому человеку соответствует одинаковый набор телефонов.
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean = other is PhoneBook && book == other.book
+
+
+    override fun hashCode(): Int = book.hashCode()
 }

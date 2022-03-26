@@ -9,19 +9,17 @@ import kotlin.math.pow
  * Фабричный метод для создания комплексного числа из строки вида x+yi
  */
 fun Complex(s: String): Complex {
-    val sign = s.replace(Regex("[^-+*]"), "")
-    val values = s.replace(Regex("[-+*]"), " ").split(" ")
+    Regex("""\d*[+-]|\d*[i]""").find(s) ?: throw Exception("Does not Match")
+    val sign = s.replace(Regex("[^-+]"), "")
+    val values = s.replace(Regex("[-+]"), " ").split(" ")
     val normal = values[0].toDouble()
     val i = when {
         sign != "-" -> values[1].replace(" ", "").replace("i", "").toDouble()
-        sign == "-" -> (sign + values[1]).replace(" ", "").replace("i", "").toDouble()
-        else -> IllegalArgumentException()
+        else -> (sign + values[1]).replace(" ", "").replace("i", "").toDouble()
     }
 
-
-    return Complex(normal, i as Double)
+    return Complex(normal, i)
 }
-
 
 /**
  * Класс "комплексное число".
@@ -37,7 +35,7 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Конструктор из вещественного числа
      */
-    constructor(x: Double) : this(TODO(), TODO())
+    constructor(x: Double) : this(x, 0.0)
 
     /**
      * Сложение.
@@ -68,14 +66,27 @@ class Complex(val re: Double, val im: Double) {
         (im * other.re - re * other.im) / (other.re.pow(2) + other.im.pow(2))
     )
 
+
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean = TODO()
-
+    override fun equals(other: Any?): Boolean = other is Complex && other.re == re && other.im == im
+//   override fun equals(other: Any?): Boolean {
+//        if (this === other) return true
+//        if (javaClass != other?.javaClass) return false
+//
+//        other as Complex
+//
+//        if (re != other.re) return false
+//        if (im != other.im) return false
+//
+//        return true
+//    }
 
     /**
      * Преобразование в строку
      */
-    override fun toString(): String = TODO()
+    override fun toString(): String = if (re + im >= re) "$re + ${im}i" else "$re - ${im}i"
+
 }
+
