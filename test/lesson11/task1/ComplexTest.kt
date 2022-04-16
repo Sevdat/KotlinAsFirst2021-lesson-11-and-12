@@ -46,6 +46,7 @@ internal class ComplexTest {
     @Tag("2")
     fun equals() {
         assertApproxEquals(Complex(1.0, 2.0), Complex("1+2i"), 1e-12)
+        assertApproxEquals(Complex(1.0, -2.0), Complex("1-2i"), 1e-12)
         assertApproxEquals(Complex(1.0, 0.0), Complex(1.0), 1e-12)
     }
 }

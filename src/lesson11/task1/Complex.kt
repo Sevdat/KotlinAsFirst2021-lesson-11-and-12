@@ -14,8 +14,8 @@ fun Complex(s: String): Complex {
     val values = s.replace(Regex("[-+]"), " ").split(" ")
     val normal = values[0].toDouble()
     val i = when {
-        sign != "-" -> values[1].replace(" ", "").replace("i", "").toDouble()
-        else -> (sign + values[1]).replace(" ", "").replace("i", "").toDouble()
+        sign != "-" -> values[1].replace("i", "").toDouble()
+        else -> (sign + values[1]).replace("i", "").toDouble()
     }
 
     return Complex(normal, i)
@@ -61,11 +61,10 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Деление
      */
-    operator fun div(other: Complex): Complex = Complex(
+    operator fun div(other: Complex): Complex = if ((other.re.pow(2) + other.im.pow(2)) != 0.0) Complex(
         (re * other.re + im * other.im) / (other.re.pow(2) + other.im.pow(2)),
         (im * other.re - re * other.im) / (other.re.pow(2) + other.im.pow(2))
-    )
-
+    ) else Complex(0.0, 0.0)
 
     /**
      * Сравнение на равенство
@@ -86,7 +85,6 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Преобразование в строку
      */
-    override fun toString(): String = if (re + im >= re) "$re + ${im}i" else "$re - ${im}i"
+    override fun toString(): String = if (re + im >= re) "$re + ${im}i" else "$re - ${-im}i"
 
 }
-
