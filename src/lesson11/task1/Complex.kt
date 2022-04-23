@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED_PARAMETER")
 
 package lesson11.task1
+
 import kotlin.IllegalArgumentException
 import kotlin.math.pow
 
@@ -85,6 +86,6 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Преобразование в строку
      */
-    override fun toString(): String = if (re + im >= re) "$re + ${im}i" else "$re - ${-im}i"
+    override fun toString(): String = if (im < 0) "$re${im}i" else "$re+${im}i"
 
 }
