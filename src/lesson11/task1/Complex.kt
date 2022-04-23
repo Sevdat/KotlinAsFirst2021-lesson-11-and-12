@@ -8,9 +8,9 @@ import kotlin.math.pow
 /**
  * Фабричный метод для создания комплексного числа из строки вида x+yi
  */
-//Regex("""\d*[+-]|\d*[i]""").find(s) ?: throw Exception("Does not Match")
+//matches(s)
 fun Complex(s: String): Complex {
-    Regex("""\d*[+-]|\d*[i]""").matches(s)
+    Regex("""\d*[+-]|\d*[i]""").find(s) ?: throw Exception("Does not Match")
     val sign = s.replace(Regex("[^-+]"), "")
     val values = s.replace(Regex("[-+]"), " ").split(" ")
     val normal = values[0].toDouble()
