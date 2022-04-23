@@ -1,15 +1,15 @@
 @file:Suppress("UNUSED_PARAMETER")
 
 package lesson11.task1
-
-import java.lang.IllegalArgumentException
+import kotlin.IllegalArgumentException
 import kotlin.math.pow
 
 /**
  * Фабричный метод для создания комплексного числа из строки вида x+yi
  */
+//Regex("""\d*[+-]|\d*[i]""").find(s) ?: throw Exception("Does not Match")
 fun Complex(s: String): Complex {
-    Regex("""\d*[+-]|\d*[i]""").find(s) ?: throw Exception("Does not Match")
+    Regex("""\d*[+-]|\d*[i]""").matches(s)
     val sign = s.replace(Regex("[^-+]"), "")
     val values = s.replace(Regex("[-+]"), " ").split(" ")
     val normal = values[0].toDouble()
@@ -64,7 +64,7 @@ class Complex(val re: Double, val im: Double) {
     operator fun div(other: Complex): Complex = if ((other.re.pow(2) + other.im.pow(2)) != 0.0) Complex(
         (re * other.re + im * other.im) / (other.re.pow(2) + other.im.pow(2)),
         (im * other.re - re * other.im) / (other.re.pow(2) + other.im.pow(2))
-    ) else Complex(0.0, 0.0)
+    ) else throw IllegalArgumentException("Denominator 0")
 
     /**
      * Сравнение на равенство

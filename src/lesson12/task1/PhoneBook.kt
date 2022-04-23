@@ -20,7 +20,7 @@ import ru.spbstu.wheels.toMutableMap
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
 class PhoneBook {
-    private val book = mutableMapOf<String, String>()
+    private val book = mutableMapOf<String, MutableSet<String>>()
 
     /**
      * Добавить человека.
@@ -29,7 +29,7 @@ class PhoneBook {
      * (во втором случае телефонная книга не должна меняться).
      */
     fun addHuman(name: String): Boolean = if (name in book) false else {
-        book[name] = ""
+        book[name] = mutableSetOf()
         true
     }
 
@@ -51,11 +51,13 @@ class PhoneBook {
      * либо у него уже был такой номер телефона,
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
-    fun addPhone(name: String, phone: String): Boolean =
-        if (name in book && phone in book.keys || name !in book && phone in book.keys) false else {
-            book[phone] = name
-            true
+    fun addPhone(name: String, phone: String): Boolean {
+        if (name in book.keys && book[name]?.contains(phone) == true) return false else {
+            for (e in book.values) if (phone in e) return false
+            book[name]?.add(phone)
+            return true
         }
+    }
 
 
     /**
@@ -64,19 +66,24 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * либо у него не было такого номера телефона.
      */
-    fun removePhone(name: String, phone: String): Boolean =
-        if (name !in book.keys || phone !in book.keys) false else {
-            book.remove(phone)
-            true
+    fun removePhone(name: String, phone: String): Boolean {
+        if (name !in book) return false else {
+            for (e in book.values) if (phone in e) {
+                book[name]?.remove(phone)
+                return true
+            }
+            return false
         }
+    }
+
     // if book is var then book = book.filter { (i, _) -> i != phone } as MutableMap<String, String>
 
     /**
      * Вернуть все номера телефона заданного человека.
      * Если этого человека нет в книге, вернуть пустой список
      */
-    fun phones(name: String): Set<String> = book.filter { (_, e) -> e == name }.keys
-
+    fun phones(name: String): Set<String> = book.getValue(name)
+//        book.filter { (_, e) -> e == name }.keys
 //    {
 //        val sus = mutableSetOf<String>()
 //        book.map { (i, e) -> if (name == e) sus += i }
@@ -87,7 +94,10 @@ class PhoneBook {
      * Вернуть имя человека по заданному номеру телефона.
      * Если такого номера нет в книге, вернуть null.
      */
-    fun humanByPhone(phone: String): String? = book[phone]
+    fun humanByPhone(phone: String): String? {
+        val result = book.filterValues { phone in it }.keys.joinToString { it }
+        return if (result != "") result else null
+    }
 
     /**
      * Две телефонные книги равны, если в них хранится одинаковый набор людей,
