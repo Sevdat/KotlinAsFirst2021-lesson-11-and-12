@@ -69,7 +69,7 @@ class PhoneBook {
     // explain better - improve e
     fun removePhone(name: String, phone: String): Boolean {
         if (name !in book) return false else {
-            for ((i, e) in book) if (phone in e) {
+            for ((i, e) in book) if (phone in e && i == name) {
                 book[i]?.remove(phone)
                 return true
             }
