@@ -9,8 +9,17 @@ import kotlin.math.pow
  * Фабричный метод для создания комплексного числа из строки вида x+yi
  */
 //matches(s)
+//matches(s)
+//\d*[+-]|\d*[i]
+//\d([0-9+-]+)i?
+//\d([0-9]+[+-][0-9])i?
+//\d([0-9][+-]?[0-9])i?
+
 fun Complex(s: String): Complex {
-    Regex("""\d*[+-]|\d*[i]""").find(s) ?: throw Exception("Does not Match")
+    if (
+        !Regex("""\d([0-9+-]+)i?""").matches(s) || s.replace(Regex("[^-+]"), "").length != 1
+    ) throw IllegalArgumentException("Value Error")
+
     val sign = s.replace(Regex("[^-+]"), "")
     val values = s.replace(Regex("[-+]"), " ").split(" ")
     val normal = values[0].toDouble()
@@ -70,6 +79,7 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Сравнение на равенство
      */
+    //null
     override fun equals(other: Any?): Boolean = other is Complex && other.re == re && other.im == im
 //   override fun equals(other: Any?): Boolean {
 //        if (this === other) return true

@@ -66,10 +66,11 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * либо у него не было такого номера телефона.
      */
+    // explain better - improve e
     fun removePhone(name: String, phone: String): Boolean {
         if (name !in book) return false else {
-            for (e in book.values) if (phone in e) {
-                book[name]?.remove(phone)
+            for ((i, e) in book) if (phone in e) {
+                book[i]?.remove(phone)
                 return true
             }
             return false
